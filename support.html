@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Support · Rolling Forecast</title>
+  <meta name="description" content="Support for Rolling Forecast for Mac and Rolling Forecast Reports for iPad." />
+  <link rel="stylesheet" href="site.css" />
+</head>
+<body>
+  <header class="site-header wrap">
+    <a class="brand" href="index.html">
+      <strong>Rolling Forecast</strong>
+      <span>Support</span>
+    </a>
+    <ul class="nav">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="privacy.html">Privacy</a></li>
+      <li><a href="support.html" aria-current="page">Support</a></li>
+      <li><a href="USER_MANUAL.html">User manual</a></li>
+    </ul>
+  </header>
+
+  <div class="wrap">
+    <section class="hero">
+      <h1>Support</h1>
+      <p>
+        Help for <strong>Rolling Forecast</strong> on Mac and
+        <strong>Rolling Forecast Reports</strong> on iPad.
+      </p>
+    </section>
+
+    <main>
+      <section class="band">
+        <h2>Contact</h2>
+        <p>
+          Email:
+          <a href="mailto:cawingcrows.musig@gmail.com?subject=Rolling%20Forecast%20support">cawingcrows.musig@gmail.com</a>
+        </p>
+        <p>We aim to reply within two business days.</p>
+        <p class="meta">
+          Please include which app you are using, your macOS or iPadOS version, the app version
+          (Mac: Settings → About), and a short description of the issue with the steps that led to it.
+          Do not send passwords or confidential financial files by email.
+        </p>
+      </section>
+
+      <section>
+        <h2>Documentation</h2>
+        <p>
+          The <a href="USER_MANUAL.html">user manual</a> covers budgets, forecasts, imports, reporting, sharing, and backup in the Mac app.
+          A <a href="Rolling_Forecast_User_Manual.pdf">PDF version</a> is also available.
+        </p>
+      </section>
+
+      <section>
+        <h2>Mac app: common questions</h2>
+
+        <h3>Where is my data stored?</h3>
+        <p>
+          On your Mac, inside the app’s sandbox (Application Support). Nothing is uploaded to us.
+          Use <strong>Settings → Zip Backup</strong> to create a zip archive you can keep in Files, iCloud Drive,
+          or another folder you choose.
+        </p>
+
+        <h3>How do I move my data to a new Mac?</h3>
+        <p>
+          Create a zip backup on the old Mac, copy it to the new one (for example through iCloud Drive or AirDrop),
+          then restore it from <strong>Settings → Zip Backup</strong>.
+        </p>
+        <p>
+          Zip backups don’t include edit keys. If iCloud Keychain is on, the new Mac picks them up automatically.
+          Otherwise, on the old Mac right-click each organization you edit, choose <strong>Edit Access…</strong> →
+          <strong>Export Key File…</strong>, and drag those <code>.rollingkey</code> files onto the new Mac’s window.
+        </p>
+
+        <h3>Why is an organization read-only?</h3>
+        <p>
+          Someone shared it with you as a read-only copy, so you can review it but not change it. It shows an eye icon
+          in the sidebar. To edit it, ask one of its editors for an edit key file (<code>.rollingkey</code>) or its edit
+          password, then click <strong>Unlock Editing…</strong>. You can also drag the key file anywhere onto the
+          main window.
+        </p>
+
+        <h3>How do I share an organization without letting people change it?</h3>
+        <p>
+          Right-click it and choose <strong>Export organization…</strong>, then <strong>Read-only copy</strong>. If the
+          organization shows as <strong>Open</strong> in <strong>Settings → Access</strong>, choose
+          <strong>Protect Editing…</strong> first. To let someone edit, send them an <strong>Editable copy</strong>, or use
+          <strong>Edit Access…</strong> to export a key file or set an edit password.
+        </p>
+
+        <h3>I sent someone a new version and it won’t replace their copy</h3>
+        <p>
+          A read-only organization can only be replaced by a file its editor exported. Export a fresh copy from the Mac
+          that edits the organization, and make sure nobody opened and re-saved the file in between. If the file was
+          changed by hand, the app warns that it was altered after export.
+        </p>
+
+        <h3>I lost the edit key</h3>
+        <p>
+          The edit key lives in your Keychain and in any key files you exported. If it is gone everywhere (for example,
+          a Mac was erased with iCloud Keychain off), nobody can edit that organization again, and we cannot recover it.
+          You can still open and review it, and <strong>Duplicate…</strong> keeps the same edit protection. Editors
+          should keep an exported key file somewhere safe.
+        </p>
+
+        <h3>What is “Restore from URL”?</h3>
+        <p>
+          An optional way to restore a zip backup from an HTTPS link you control, such as a Google Drive share link.
+          Leave the field blank if you do not use it. The app has no default backup URL.
+        </p>
+
+        <h3>I forgot an organization’s password</h3>
+        <p>
+          A password-protected organization is saved encrypted with a key made from its password, and the password
+          itself is never stored. We cannot recover or reset it. The password hint (if you set one) appears on the
+          unlock screen. If the password is lost, restore an earlier backup made before the password was added.
+        </p>
+
+        <h3>Excel export</h3>
+        <p>
+          Forecast → Export to Excel offers column layout (Actual / Budget / Forecast side by side)
+          or row layout (metric rows). Known expenses export the same either way.
+        </p>
+
+        <h3>Voice search asks for microphone access</h3>
+        <p>
+          The microphone is used only while you speak an account name to find it. You can deny access and still use
+          the rest of the app, or change it later in System Settings → Privacy &amp; Security.
+        </p>
+      </section>
+
+      <section>
+        <h2>iPad reader: common questions</h2>
+
+        <h3>What does Rolling Forecast Reports do?</h3>
+        <p>
+          It is a read-only iPad companion to the Mac app. It opens organizations created in
+          Rolling Forecast so you can browse reports, charts, scorecards, and report packs,
+          present them, and export them to PDF or PowerPoint.
+        </p>
+
+        <h3>How do I get my data onto the iPad?</h3>
+        <p>Tap <strong>+</strong> in the Library and choose one of:</p>
+        <ul>
+          <li><strong>Import File</strong> — an organization export (<code>.rollingorg.json</code>) or a zip backup from the Mac app, from Files or iCloud Drive.</li>
+          <li><strong>Import from Link</strong> — an HTTPS link to an export or backup, including Google Drive share links.</li>
+          <li><strong>Link Backup Folder</strong> — the folder your Mac app saves backups into (for example in iCloud Drive). Use <strong>Refresh</strong> to load the newest backup.</li>
+        </ul>
+
+        <h3>Will changes on the iPad affect my Mac data?</h3>
+        <p>
+          No. The reader never writes back to the Mac app’s files. Edits you make to report packs on the iPad stay on
+          the iPad, and the reader tells you when the Mac version of a pack has changed since you edited it.
+        </p>
+
+        <h3>A password-protected organization asks for its password</h3>
+        <p>
+          Enter the same password used on the Mac. The reader keeps the organization unlocked only until the app quits,
+          and does not save the password.
+        </p>
+
+        <h3>How do I back up the reader?</h3>
+        <p>
+          Use <strong>Backup → Back Up Reader</strong> in the Library to save a zip of your imported snapshots and local
+          pack edits, and <strong>Restore Reader Backup</strong> to bring it back. Deleting the app deletes its data.
+        </p>
+      </section>
+
+      <section>
+        <h2>Privacy</h2>
+        <p>See the <a href="privacy.html">privacy policy</a> for how both apps handle your data.</p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <p>Copyright © 2026 Mike Coxon. All rights reserved.</p>
+      <p>Not affiliated with Apple Inc.</p>
+    </footer>
+  </div>
+</body>
+</html>

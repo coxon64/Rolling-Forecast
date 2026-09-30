@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<!--
+  Rolling Forecast — macOS User Manual (HTML source).
+
+  Regenerate PDF (preferred — Chromium print preserves layout/CSS):
+    cd Docs
+    "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge" \
+      --headless --disable-gpu --no-pdf-header-footer \
+      --print-to-pdf="Rolling_Forecast_User_Manual.pdf" \
+      "file://$(pwd)/USER_MANUAL.html"
+
+  Alternate (AppKit text pagination — simpler styling):
+    swiftc -parse-as-library -o GenerateUserManualPDF GenerateUserManualPDF.swift -framework AppKit
+    ./GenerateUserManualPDF USER_MANUAL.html Rolling_Forecast_User_Manual.pdf
+
+  Or open this file in Safari and choose File → Export as PDF…
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rolling Forecast — macOS User Manual</title>
+  <meta name="description" content="macOS user manual for Rolling Forecast: budgets, actuals, scenarios, dashboard, analytics, and exports." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #14181c;
+      --ink-soft: #2a323a;
+      --muted: #5c6770;
+      --paper: #f7f8f9;
+      --paper-elevated: #ffffff;
+      --charcoal: #1a2229;
+      --charcoal-deep: #0f1418;
+      --teal: #0d9488;
+      --teal-deep: #0f766e;
+      --teal-soft: #ccfbf1;
+      --gold: #c4a35a;
+      --gold-soft: #f5edd8;
+      --border: #d5dcde;
+      --border-strong: #b8c0c8;
+      --caution-bg: #fef6f0;
+      --caution-border: #c2410c;
+      --note-bg: #f0f7f6;
+      --tip-bg: #f3f6f4;
+      --editor-bg: #f7f4ec;
+      --shadow: 0 1px 2px rgba(15, 20, 24, 0.06), 0 8px 24px rgba(15, 20, 24, 0.06);
+      --radius: 10px;
+      --sidebar-w: 15.5rem;
+      --font-display: "Fraunces", "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+      --font-body: "Source Sans 3", "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --max-content: 46rem;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      font-size: 1.02rem;
+      line-height: 1.55;
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 500px at 10% -10%, rgba(13, 148, 136, 0.08), transparent 55%),
+        radial-gradient(900px 400px at 100% 0%, rgba(196, 163, 90, 0.07), transparent 50%),
+        var(--paper);
+    }
+
+    a { color: var(--teal-deep); text-decoration-thickness: 1px; text-underline-offset: 0.15em; }
+    a:hover { color: var(--teal); }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      background: var(--charcoal);
+      color: #fff;
+      padding: 0.5rem 0.75rem;
+      z-index: 100;
+    }
+    .skip-link:focus { left: 0.5rem; top: 0.5rem; }
+
+    .layout {
+      display: grid;
+      grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+      gap: 0;
+      min-height: 100vh;
+    }
+
+    /* —— Sidebar / TOC —— */
+    .toc-toggle {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      width: 100%;
+      border: 0;
+      border-bottom: 1px solid var(--border);
+      background: var(--charcoal);
+      color: #f0f4f5;
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 0.85rem 1rem;
+      text-align: left;
+      cursor: pointer;
+    }
+    .toc-toggle span { opacity: 0.75; font-weight: 500; margin-left: 0.35rem; }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      align-self: start;
+      height: 100vh;
+      overflow: auto;
+      background: linear-gradient(180deg, var(--charcoal) 0%, var(--charcoal-deep) 100%);
+      color: #dce3e7;
+      padding: 1.35rem 1rem 2rem;
+      border-right: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .sidebar .brand-mark {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.25;
+      color: #fff;
+      margin: 0 0 0.2rem;
+      letter-spacing: -0.01em;
+    }
+    .sidebar .brand-sub {
+      font-size: 0.78rem;
+      color: rgba(220, 227, 231, 0.65);
+      margin: 0 0 1.25rem;
+    }
+    .sidebar nav { display: flex; flex-direction: column; gap: 0.15rem; }
+    .sidebar a {
+      color: rgba(230, 236, 239, 0.82);
+      text-decoration: none;
+      font-size: 0.84rem;
+      line-height: 1.3;
+      padding: 0.38rem 0.55rem;
+      border-radius: 6px;
+      border-left: 2px solid transparent;
+    }
+    .sidebar a:hover {
+      background: rgba(13, 148, 136, 0.18);
+      color: #fff;
+      border-left-color: var(--teal);
+    }
+    .sidebar .toc-group {
+      margin-top: 0.85rem;
+      padding-top: 0.55rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      padding-left: 0.55rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .main {
+      min-width: 0;
+      padding: 0 1.5rem 4rem;
+    }
+    .main-inner {
+      max-width: calc(var(--max-content) + 6rem);
+      margin: 0 auto;
+    }
+
+    /* —— Cover / hero —— */
+    .cover {
+      margin: 1.5rem 0 2.5rem;
+      padding: 0;
+    }
+    .cover-visual {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      background: var(--charcoal-deep);
+      margin-bottom: 1.75rem;
+    }
+    .cover-visual img {
+      display: block;
+      width: 100%;
+      max-height: 22rem;
+      object-fit: cover;
+      object-position: center;
+    }
+    .cover-copy {
+      max-width: 38rem;
+    }
+    .cover-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--teal-deep);
+      margin: 0 0 0.65rem;
+    }
+    .cover h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4.5vw, 2.85rem);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: var(--charcoal-deep);
+      margin: 0 0 0.65rem;
+    }
+    .cover .lede {
+      font-size: 1.15rem;
+      color: var(--ink-soft);
+      margin: 0 0 1rem;
+      max-width: 34rem;
+    }
+    .cover-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem 1.25rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+    .cover-meta li::before {
+      content: "";
+      display: inline-block;
+      width: 0.4rem;
+      height: 0.4rem;
+      border-radius: 50%;
+      background: var(--teal);
+      margin-right: 0.45rem;
+      vertical-align: 0.15rem;
+    }
+
+    /* —— Typography —— */
+    section.manual-section {
+      margin: 0 0 2.75rem;
+      padding-top: 0.25rem;
+      scroll-margin-top: 1.25rem;
+    }
+    h2 {
+      font-family: var(--font-display);
+      font-size: 1.65rem;
+      font-weight: 650;
+      letter-spacing: -0.015em;
+      color: var(--charcoal-deep);
+      margin: 0 0 0.85rem;
+      padding-bottom: 0.45rem;
+      border-bottom: 2px solid var(--teal);
+      display: inline-block;
+      min-width: min(100%, 18rem);
+    }
+    h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--ink-soft);
+      margin: 1.5rem 0 0.55rem;
+    }
+    h4 {
+      font-size: 1.02rem;
+      font-weight: 650;
+      color: var(--ink);
+      margin: 1.15rem 0 0.4rem;
+    }
+    p { margin: 0.5rem 0; }
+    .lead { font-size: 1.08rem; color: var(--ink-soft); }
+
+    ul, ol { margin: 0.45rem 0 0.75rem; padding-left: 1.35rem; }
+    li { margin: 0.28rem 0; }
+    ol.steps { padding-left: 1.5rem; }
+    ol.steps > li { margin: 0.55rem 0; padding-left: 0.25rem; }
+    ol.steps > li::marker { font-weight: 700; color: var(--teal-deep); }
+
+    code, .path {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 0.88em;
+      background: rgba(13, 148, 136, 0.08);
+      padding: 0.08em 0.35em;
+      border-radius: 4px;
+    }
+    kbd {
+      font-family: var(--font-body);
+      font-size: 0.85em;
+      font-weight: 600;
+      background: #eef1f3;
+      border: 1px solid var(--border-strong);
+      border-bottom-width: 2px;
+      border-radius: 5px;
+      padding: 0.05em 0.4em;
+      white-space: nowrap;
+    }
+
+    /* —— Figures —— */
+    figure {
+      margin: 1.25rem 0;
+      padding: 0;
+      break-inside: avoid;
+    }
+    figure img {
+      display: block;
+      width: 100%;
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      background: #fff;
+    }
+    figcaption {
+      margin-top: 0.55rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    figcaption strong { color: var(--ink-soft); font-weight: 600; }
+
+    /* —— Callouts —— */
+    .callout {
+      margin: 1rem 0;
+      padding: 0.75rem 0.95rem;
+      border-radius: 8px;
+      border-left: 3px solid var(--teal);
+      background: var(--note-bg);
+      break-inside: avoid;
+    }
+    .callout .label {
+      display: block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.25rem;
+      color: var(--teal-deep);
+    }
+    .callout.tip { border-left-color: var(--teal); background: var(--tip-bg); }
+    .callout.note { border-left-color: #3d7a8c; background: #eef5f7; }
+    .callout.note .label { color: #2a5a68; }
+    .callout.editor {
+      border-left-color: var(--gold);
+      background: var(--editor-bg);
+    }
+    .callout.editor .label { color: #8a6d2e; }
+    .callout.caution {
+      border-left-color: var(--caution-border);
+      background: var(--caution-bg);
+    }
+    .callout.caution .label { color: #9a3412; }
+    .callout p:first-of-type { margin-top: 0; }
+    .callout p:last-child { margin-bottom: 0; }
+
+    /* —— Tables —— */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 0.85rem 0 1.15rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--paper-elevated);
+      box-shadow: 0 1px 2px rgba(15, 20, 24, 0.04);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.92rem;
+    }
+    th, td {
+      text-align: left;
+      padding: 0.55rem 0.75rem;
+      vertical-align: top;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: #e8eef0;
+      color: var(--charcoal);
+      font-weight: 650;
+      font-size: 0.82rem;
+      letter-spacing: 0.02em;
+    }
+    tr:last-child td { border-bottom: 0; }
+    tbody tr:nth-child(even) td { background: rgba(13, 148, 136, 0.03); }
+    td:first-child { font-weight: 550; color: var(--ink-soft); white-space: nowrap; }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+      gap: 0.55rem;
+      margin: 0.75rem 0 1rem;
+    }
+    .tool-item {
+      background: var(--paper-elevated);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.65rem 0.75rem;
+      font-size: 0.9rem;
+    }
+    .tool-item strong {
+      display: block;
+      color: var(--charcoal);
+      margin-bottom: 0.2rem;
+      font-size: 0.92rem;
+    }
+    .tool-item span { color: var(--muted); font-size: 0.85rem; }
+
+    .workspace-list {
+      display: grid;
+      gap: 0.45rem;
+      margin: 0.75rem 0 1rem;
+      padding: 0;
+      list-style: none;
+    }
+    .workspace-list li {
+      display: grid;
+      grid-template-columns: 7.5rem 1fr;
+      gap: 0.75rem;
+      padding: 0.55rem 0.7rem;
+      background: var(--paper-elevated);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin: 0;
+    }
+    .workspace-list .ws-name {
+      font-weight: 700;
+      color: var(--teal-deep);
+      font-size: 0.92rem;
+    }
+
+    footer.manual-footer {
+      margin-top: 3rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    /* —— Responsive —— */
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .toc-toggle { display: block; }
+      .sidebar {
+        display: none;
+        position: static;
+        height: auto;
+        max-height: none;
+      }
+      body.toc-open .sidebar { display: block; }
+      .main { padding: 0 1rem 3rem; }
+      .workspace-list li { grid-template-columns: 1fr; gap: 0.2rem; }
+      td:first-child { white-space: normal; }
+    }
+
+    /* —— Print —— */
+    @page {
+      size: letter;
+      margin: 0.65in 0.7in;
+    }
+    @media print {
+      html { scroll-behavior: auto; }
+      body {
+        background: #fff;
+        color: #000;
+        font-size: 10pt;
+        line-height: 1.4;
+      }
+      .skip-link, .toc-toggle { display: none !important; }
+      .layout { display: block; }
+      .sidebar {
+        display: none !important;
+      }
+      .main { padding: 0; }
+      .main-inner { max-width: none; }
+      .cover-visual { box-shadow: none; break-inside: avoid; }
+      .cover-visual img { max-height: 3.8in; }
+      a { color: inherit; text-decoration: none; }
+      a[href^="http"]::after {
+        content: " (" attr(href) ")";
+        font-size: 8pt;
+        color: #555;
+      }
+      .callout, figure, .table-wrap, .tool-item, .workspace-list li {
+        break-inside: avoid;
+      }
+      h2, h3 { break-after: avoid; }
+      figure img { box-shadow: none; }
+      .tool-grid { box-shadow: none; }
+      section.manual-section { margin-bottom: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#content">Skip to content</a>
+  <button type="button" class="toc-toggle" id="tocToggle" aria-expanded="false" aria-controls="manualToc">
+    Contents <span id="tocToggleHint">(show)</span>
+  </button>
+
+  <div class="layout">
+    <aside class="sidebar" id="manualToc" aria-label="Table of contents">
+      <p class="brand-mark">Rolling<br />Forecast</p>
+      <p class="brand-sub">macOS User Manual</p>
+      <nav>
+        <a href="#cover">Cover</a>
+        <a href="#welcome">1. Welcome</a>
+        <a href="#concepts">2. Core concepts</a>
+        <a href="#getting-started">3. First launch</a>
+        <a href="#shell">4. The Mac shell</a>
+        <a href="#control-center">5. Environment Control Center</a>
+        <div class="toc-group">Workspaces</div>
+        <a href="#forecast">6. Forecast</a>
+        <a href="#workbench">7. Forecast workbench</a>
+        <a href="#builder">8. Budget Builder &amp; Reality Check</a>
+        <a href="#summary">9. Forecast summary</a>
+        <a href="#fva">10. Forecast vs actual</a>
+        <a href="#dashboard">11. Dashboard</a>
+        <a href="#analytics">12. Analytics</a>
+        <a href="#reporting">13. Reporting Studio</a>
+        <a href="#cashflow">14. Cashflow</a>
+        <a href="#investments">15. Investments</a>
+        <div class="toc-group">Reference</div>
+        <a href="#imports-exports">16. Imports &amp; exports</a>
+        <a href="#sharing">17. Sharing &amp; protecting</a>
+        <a href="#settings">18. Settings</a>
+        <a href="#shortcuts">19. Keyboard shortcuts</a>
+        <a href="#tips">20. Tips &amp; privacy</a>
+        <a href="#support">21. Support &amp; legal</a>
+      </nav>
+    </aside>
+
+    <div class="main">
+      <div class="main-inner" id="content">
+
+        <!-- ========== COVER ========== -->
+        <header class="cover" id="cover">
+          <div class="cover-visual">
+            <img src="manual-screenshots/macos/00-branding/hero-cover.png" alt="Rolling Forecast cover art" width="1600" height="900" loading="eager" />
+          </div>
+          <div class="cover-copy">
+            <p class="cover-eyebrow">macOS User Manual</p>
+            <h1>Rolling Forecast</h1>
+            <p class="lede">Plan budgets, import actuals, and steer rolling forecast scenarios—privately on your Mac.</p>
+            <ul class="cover-meta">
+              <li>Aligned with product features in the Rolling Forecast macOS app</li>
+              <li>Companion iPad app: <strong>Rolling Forecast Reports</strong></li>
+              <li>Copyright © 2026 Mike Coxon. All rights reserved.</li>
+            </ul>
+          </div>
+        </header>
+
+        <!-- ========== 1. WELCOME ========== -->
+        <section class="manual-section" id="welcome">
+          <h2>1. Welcome</h2>
+          <p class="lead"><strong>Rolling Forecast</strong> is a finance and planning workbench for organizations that need fiscal-year budgets, monthly actuals, and scenario-based rolling forecasts—without uploading your books to a vendor cloud.</p>
+          <p>Your organization data lives in the app sandbox on your Mac. Backups are zip files you control; optional restore from a URL you configure is pull-based, not a hosted database service.</p>
+          <p>This manual is written for Mac end users in finance and planning roles. A read-only iPad companion, <strong>Rolling Forecast Reports</strong>, also exists; this guide documents the <strong>macOS</strong> experience only.</p>
+          <div class="callout tip">
+            <span class="label">Tip</span>
+            <p>Keep one recent zip backup before large imports or structural hierarchy changes. See <a href="#tips">Tips, privacy &amp; backup</a>.</p>
+          </div>
+        </section>
+
+        <!-- ========== 2. CORE CONCEPTS ========== -->
+        <section class="manual-section" id="concepts">
+          <h2>2. Core concepts</h2>
+          <p>These terms appear throughout the app and this manual.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Term</th><th>Meaning</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Organization</td>
+                  <td>A named entity that holds fiscal years, budgets, actuals, scenarios, and related imports. You switch organizations from the Mac sidebar.</td>
+                </tr>
+                <tr>
+                  <td>Fiscal year start month</td>
+                  <td>The calendar month that begins each fiscal year for the organization (for example, July for a July–June year).</td>
+                </tr>
+                <tr>
+                  <td>Fiscal year budget</td>
+                  <td>The planned amounts for one fiscal year, organized by the account hierarchy and months.</td>
+                </tr>
+                <tr>
+                  <td>Account hierarchy</td>
+                  <td>The outline of statement sections, subtotals, and detail lines that drives the Forecast grid and reporting scopes.</td>
+                </tr>
+                <tr>
+                  <td>Budget</td>
+                  <td>Planned values (B) for accounts by month. Distinct from actuals and from rolling forecast scenario values.</td>
+                </tr>
+                <tr>
+                  <td>Actuals</td>
+                  <td>Recorded results (A) by month, typically imported from spreadsheets or other sources after the month closes.</td>
+                </tr>
+                <tr>
+                  <td>Rolling forecast scenario</td>
+                  <td>A named forecast case with its own start month and forecast values (F). You can maintain several scenarios and choose which one the grid uses.</td>
+                </tr>
+                <tr>
+                  <td>Start month / actuals-led vs forecast window</td>
+                  <td>The scenario start month divides months that lean on actuals (or closed results) from the forward forecast window you are projecting.</td>
+                </tr>
+                <tr>
+                  <td>Full year closing model</td>
+                  <td>How the app fills or closes the full fiscal year when combining budget, actuals, and forecast so annual totals remain coherent.</td>
+                </tr>
+                <tr>
+                  <td>Known forecast expenses</td>
+                  <td>Named expense overlays you attach to a scenario so specific costs stay visible and adjustable without rewriting the whole grid.</td>
+                </tr>
+                <tr>
+                  <td>Plan vs rolling blend</td>
+                  <td>How budget plan and rolling forecast combine when presenting outcomes (for example on the dashboard and summary).</td>
+                </tr>
+                <tr>
+                  <td>Net income</td>
+                  <td>The bottom-line result used in scenario outcomes and comparisons (forecast, budget, and variance vs budget).</td>
+                </tr>
+                <tr>
+                  <td>Hidden rows</td>
+                  <td>Account rows suppressed from the grid view so you can focus on the lines that matter for a given review.</td>
+                </tr>
+                <tr>
+                  <td>Outline bookmarks</td>
+                  <td>Saved expand/collapse presets for the account outline so you can jump back to a favorite layout.</td>
+                </tr>
+                <tr>
+                  <td>Organization password</td>
+                  <td>Optional password that must be entered to <em>open</em> an organization. Its contents are saved encrypted, and the password cannot be recovered.</td>
+                </tr>
+                <tr>
+                  <td>Edit access</td>
+                  <td>Decides who can <em>change</em> an organization, separately from who can open it. Each organization is <strong>Editor</strong> (you can change it on this Mac), <strong>Read-only</strong> (you can review it but not change it), or <strong>Open</strong> (anyone with a copy can change it). You are the editor of organizations you create.</td>
+                </tr>
+                <tr>
+                  <td>Edit key file (<code>.rollingkey</code>)</td>
+                  <td>A small file that gives edit access to one organization. Editors export it from <strong>Edit Access…</strong> and hand it to co-editors, who drag it onto the main window.</td>
+                </tr>
+                <tr>
+                  <td>Backup zip</td>
+                  <td>A zip archive of organization data written to a folder you choose, or restored from a file / configured URL.</td>
+                </tr>
+                <tr>
+                  <td>Organization package (<code>.rollingorg.json</code>)</td>
+                  <td>An export/import package for handing off or backing up a single organization between installs. Editors export either a <strong>read-only copy</strong> (signed, so recipients can tell it came from an editor) or an <strong>editable copy</strong> (includes the edit key).</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ========== 3. GETTING STARTED ========== -->
+        <section class="manual-section" id="getting-started">
+          <h2>3. First launch &amp; getting started</h2>
+          <p>On launch you may see the Rolling Forecast splash / About screen, then the main window.</p>
+
+          <h3>Startup options</h3>
+          <p>In <strong>Settings → Startup</strong>, choose what happens automatically when the app opens:</p>
+          <ul>
+            <li><strong>None</strong> — Open straight into the last workspace.</li>
+            <li><strong>Ask restore from URL</strong> — Prompt to restore from the backup zip URL configured under Backup. Cannot run together with Control Center at launch.</li>
+            <li><strong>Environment Control Center</strong> — Open the Control Center so you can pick an organization and scenario outcome before diving into the grid.</li>
+          </ul>
+
+          <h3>Recommended first-time path</h3>
+          <ol class="steps">
+            <li>Create an <strong>organization</strong> and set its <strong>fiscal year start month</strong>.</li>
+            <li>Open the <strong>Environment Control Center</strong> (startup option or from Backup / menu) and review scenario outcomes when data exists.</li>
+            <li><strong>Import a budget</strong> (or build lines) for the fiscal year you care about.</li>
+            <li>Select the working <strong>fiscal year</strong> in the header.</li>
+            <li><strong>Create a rolling forecast scenario</strong> in the Forecast workbench; set its start month.</li>
+            <li><strong>Import actuals</strong> for closed months so the grid can show B / A / F clearly.</li>
+            <li>Switch to <strong>Dashboard</strong> or <strong>Forecast summary</strong> to validate net income outcomes before sharing.</li>
+          </ol>
+
+          <figure>
+            <img src="manual-screenshots/macos/02-getting-started/control-center.png" alt="Environment Control Center showing organizations and scenario outcomes" loading="lazy" />
+            <figcaption><strong>Figure.</strong> Environment Control Center — organizations and scenario outcomes (Forecast / Budget / Vs budget net income).</figcaption>
+          </figure>
+
+          <div class="callout editor">
+            <span class="label">Edit access</span>
+            <p>Anyone can create, import, and export organizations. You are the editor of the organizations you create. Organizations someone shared with you as a read-only copy open for review only: importing budgets and actuals, changing scenarios, and editing structure need that organization’s edit access. See <a href="#sharing">Sharing &amp; protecting organizations</a>.</p>
+          </div>
+        </section>
+
+        <!-- ========== 4. MAC SHELL ========== -->
+        <section class="manual-section" id="shell">
+          <h2>4. The Mac shell</h2>
+          <p>The main window is built around a left <strong>Organizations</strong> sidebar, a <strong>workspace switcher</strong>, and a header with scenario and fiscal-year controls.</p>
+
+          <figure>
+            <img src="manual-screenshots/macos/00-branding/workspace-map.png" alt="Map of the eight primary workspaces in Rolling Forecast" loading="lazy" />
+            <figcaption><strong>Figure.</strong> Workspace map — eight primary areas of the Mac shell.</figcaption>
+          </figure>
+
+          <h3>Workspace switcher</h3>
+          <ul class="workspace-list">
+            <li><span class="ws-name">Forecast</span><span>Budget / actuals / forecast grid and Forecast tools.</span></li>
+            <li><span class="ws-name">Investments</span><span>Monthly portfolio snapshots (Fidelity-style imports).</span></li>
+            <li><span class="ws-name">Dashboard</span><span>Scorecards, PowerPoint export, annual scorecard PDF.</span></li>
+            <li><span class="ws-name">Analytics</span><span>Deep chart analysis, deck export, copy chart.</span></li>
+            <li><span class="ws-name">Reporting</span><span>Reporting Studio: charts → scorecards → packs → PowerPoint.</span></li>
+            <li><span class="ws-name">Summary</span><span>Forecast summary statement (Prior / Current / Budget / Δ).</span></li>
+            <li><span class="ws-name">F vs A</span><span>Forecast vs actual analysis for a compare month.</span></li>
+            <li><span class="ws-name">Cashflow</span><span>Beginning cash, balance sheet, modeler, operating fund flags.</span></li>
+          </ul>
+
+          <h3>Header controls</h3>
+          <ul>
+            <li><strong>Scenario</strong> — Active rolling forecast scenario used by the grid and many scorecards.</li>
+            <li><strong>Fiscal year</strong> — Working year for edits and most views.</li>
+          </ul>
+
+          <div class="callout note">
+            <span class="label">Note</span>
+            <p>Read-only organizations show an eye icon in the sidebar and a <strong>Read-only</strong> strip above the workspace with an <strong>Unlock Editing…</strong> button. If <strong>Open read-only organizations in Analytics</strong> is on (Settings → Access), the workspace switcher for those organizations is limited to analytics-focused areas so navigation stays on charts and related review surfaces.</p>
+          </div>
+        </section>
+
+        <!-- ========== 5. CONTROL CENTER ========== -->
+        <section class="manual-section" id="control-center">
+          <h2>5. Environment Control Center</h2>
+          <p>Use the Control Center as a launchpad when you manage several organizations or need a quick net-income readout before opening the grid.</p>
+          <ul>
+            <li><strong>Organization list</strong> — Select which org is active.</li>
+            <li><strong>Scenario outcomes</strong> — For each scenario, review <strong>Forecast</strong>, <strong>Budget</strong>, and <strong>Vs budget</strong> net income.</li>
+            <li><strong>Select scenario</strong> — Apply the scenario you want to work with.</li>
+            <li><strong>Double-click (or double-tap trackpad)</strong> — Close the Control Center and continue into the main shell.</li>
+            <li><strong>Refresh from server</strong> — Pull the backup zip from the URL saved in Backup settings (same link used by the restore-from-URL startup prompt).</li>
+          </ul>
+          <div class="callout tip">
+            <span class="label">Tip</span>
+            <p>Configure the restore URL once under Settings → Backup; both Control Center refresh and the startup restore prompt use that saved link.</p>
+          </div>
+        </section>
+
+        <!-- ========== 6. FORECAST ========== -->
+        <section class="manual-section" id="forecast">
+          <h2>6. Forecast workspace</h2>
+          <p>Forecast is the primary planning surface: an account hierarchy grid with budget (B), actuals (A), and forecast (F) columns by month.</p>
+
+          <figure>
+            <img src="manual-screenshots/macos/03-forecast/forecast-grid.png" alt="Forecast budget grid showing account hierarchy and monthly columns" loading="lazy" />
+            <figcaption><strong>Figure.</strong> Forecast workspace — budget / actuals / forecast grid.</figcaption>
+          </figure>
+
+          <h3>Grid basics</h3>
+          <ul>
+            <li><strong>B / A / F</strong> — Toggle amount types so you can focus on plan, results, or forecast values.</li>
+            <li><strong>Compare / variance</strong> — Surface differences between selected bases (for example forecast vs budget).</li>
+            <li><strong>Zoom</strong> — <kbd>⌘+</kbd> / <kbd>⌘−</kbd> / <kbd>⌘0</kbd> (reset); <kbd>⌘⇧9</kbd> fits the grid. You can also drag the zoom slider or hold <kbd>Shift</kbd> while scrolling the mouse wheel.</li>
+            <li><strong>Outline bookmarks</strong> — Save and restore expand/collapse layouts for large models.</li>
+            <li><strong>Notes</strong> — Attach notes to rows or cells where editing is allowed.</li>
+            <li><strong>Locks</strong> — Scenario or cell locks protect values while you continue editing elsewhere (managed from the workbench and grid tools).</li>
+          </ul>
+
+          <h3>Forecast tools</h3>
+          <p>Open Forecast tools from the Forecast workspace chrome. Common actions:</p>
+          <div class="tool-grid">
+            <div class="tool-item"><strong>Full forecast</strong><span>Expand to a dense full-year forecast layout.</span></div>
+            <div class="tool-item"><strong>Import budget</strong><span>Bring in plan amounts from a supported spreadsheet.</span></div>
+            <div class="tool-item"><strong>Budget Builder</strong><span>Guided build / punch-list workflow; Excel output.</span></div>
+            <div class="tool-item"><strong>Reality Check</strong><span>Narrative PDF plus Excel punch list of issues.</span></div>
+            <div class="tool-item"><strong>Export budget</strong><span>Write budget data out for offline work.</span></div>
+            <div class="tool-item"><strong>Import actuals</strong><span>Load monthly actuals for the working year.</span></div>
+            <div class="tool-item"><strong>Import payments</strong><span>Monthly payments for payee analytics / dashboard.</span></div>
+            <div class="tool-item"><strong>Actuals by month</strong><span>Inspect or clear actuals for specific months.</span></div>
+            <div class="tool-item"><strong>Import history year</strong><span>Add or refresh a prior fiscal year for YoY views.</span></div>
+            <div class="tool-item"><strong>Hidden rows</strong><span>Show or manage suppressed account rows.</span></div>
+            <div class="tool-item"><strong>Forecast look</strong><span>Grid colors, column style, density.</span></div>
+            <div class="tool-item"><strong>Currency</strong><span>Display format for amounts.</span></div>
+            <div class="tool-item"><strong>Export Excel</strong><span>Export the grid (and related sheets) to .xlsx.</span></div>
+            <div class="tool-item"><strong>Export HTML pack</strong><span>Package a browsable HTML snapshot.</span></div>
+            <div class="tool-item"><strong>Forecast workbench</strong><span>Create and manage scenarios.</span></div>
+            <div class="tool-item"><strong>Hierarchy views</strong><span>Alternate outline presentations.</span></div>
+            <div class="tool-item"><strong>Fix import tree</strong><span>Repair hierarchy after messy imports.</span></div>
+            <div class="tool-item"><strong>Known expenses</strong><span>Overlay named forecast expenses on a scenario.</span></div>
+            <div class="tool-item"><strong>Import Teller</strong><span>Import Teller / offerings-related data.</span></div>
+            <div class="tool-item"><strong>Import attendance</strong><span>Attendance series for dashboard / analytics.</span></div>
+            <div class="tool-item"><strong>Teller values</strong><span>Review and manage imported Teller values.</span></div>
+          </div>
+
+          <div class="callout caution">
+            <span class="label">Caution</span>
+            <p>After any import, spot-check subtotals and a few key detail lines before you export or present. Use <strong>Fix import tree</strong> if the outline looks flattened or mis-parented.</p>
+          </div>
+        </section>
+
+        <!-- ========== 7. WORKBENCH ========== -->
+        <section class="manual-section" id="workbench">
+          <h2>7. Forecast workbench &amp; known expenses</h2>
+          <p>The <strong>Forecast workbench</strong> is where you manage rolling forecast scenarios for the selected organization and fiscal year.</p>
+          <h3>Scenarios</h3>
+          <ul>
+            <li><strong>Create / rename / duplicate / delete</strong> scenarios as your planning cases evolve.</li>
+            <li><strong>Advance start month</strong> — Move the boundary between actuals-led months and the forecast window as the year progresses.</li>
+            <li><strong>Lock</strong> — Protect a scenario from accidental edits.</li>
+            <li><strong>Use in grid</strong> — Make the scenario active for the Forecast workspace and dependent views.</li>
+          </ul>
+          <h3>Known forecast expenses</h3>
+          <p>Known expenses are named overlays on a scenario. Use them for commitments you want to track explicitly (for example fixed contracts) without burying them only in detail lines. They appear in Forecast tools, the Dashboard <strong>Known Expenses</strong> scorecard, and related Excel exports.</p>
+          <div class="callout editor">
+            <span class="label">Edit access</span>
+            <p>Creating, duplicating, and deleting scenarios, and advancing start months, require edit access to the organization.</p>
+          </div>
+        </section>
+
+        <!-- ========== 8. BUILDER & REALITY CHECK ========== -->
+        <section class="manual-section" id="builder">
+          <h2>8. Budget Builder &amp; Reality Check</h2>
+          <h3>Budget Builder</h3>
+          <p>Open <strong>Budget Builder</strong> from Forecast tools when you need a structured pass over the plan. Work through the guided steps, then export an <strong>Excel punch list</strong> of builder outputs for offline review or handoff.</p>
+          <h3>Reality Check</h3>
+          <p><strong>Reality Check</strong> reviews the current budget / forecast coherence and produces:</p>
+          <ul>
+            <li>An <strong>Excel punch list</strong> of findings to work through.</li>
+            <li>A <strong>narrative PDF</strong> suitable for sharing a written assessment.</li>
+          </ul>
+          <div class="callout tip">
+            <span class="label">Tip</span>
+            <p>Run Reality Check after major imports or before a board package so issues surface before Dashboard and Summary exports.</p>
+          </div>
+        </section>
+
+        <!-- ========== 9. SUMMARY ========== -->
+        <section class="manual-section" id="summary">
+          <h2>9. Forecast summary</h2>
+          <p>The Summary workspace is a statement-style readout tuned for leadership review.</p>
+          <figure>
+            <img src="manual-screenshots/macos/04-summary/scenario-outcomes.png" alt="Scenario outcomes table comparing forecast net income to budget" loading="lazy" />
+            <figcaption><strong>Figure.</strong> Scenario outcomes — full-year net income Forecast vs Budget (same figures as Control Center and Forecast summary).</figcaption>
+          </figure>
+          <ul>
+            <li><strong>Prior vs Current vs Budget vs Δ</strong> — Side-by-side statement columns for quick variance reading.</li>
+            <li><strong>Scenario outcomes</strong> — Net income context for the active scenario.</li>
+            <li><strong>Bookmarks</strong> — Jump to saved outline focuses.</li>
+            <li><strong>Appearance</strong> — Summary appearance scheme (also available from Settings).</li>
+            <li><strong>Copy image</strong> — Capture the visible summary for slides or email.</li>
+          </ul>
+        </section>
+
+        <!-- ========== 10. F VS A ========== -->
+        <section class="manual-section" id="fva">
+          <h2>10. Forecast vs actual (F vs A)</h2>
+          <p>Use <strong>F vs A</strong> when you need a focused month comparison between forecast and actuals.</p>
+          <ul>
+            <li>Choose the <strong>compare month</strong>.</li>
+            <li>Optionally include <strong>reference scenario months</strong> for additional context.</li>
+            <li><strong>Export to Excel</strong> when you need a numeric trail for audit or email.</li>
+          </ul>
+        </section>
+
+        <!-- ========== 11. DASHBOARD ========== -->
+        <section class="manual-section" id="dashboard">
+          <h2>11. Dashboard</h2>
+          <p>Dashboard assembles scorecards for the working organization, fiscal year, and scenario. Customize which cards appear and in what order for on-screen review and PowerPoint export.</p>
+
+          <figure>
+            <img src="manual-screenshots/macos/05-dashboard/dashboard-overview.png" alt="Dashboard Forecast Outcome scorecard" loading="lazy" />
+            <figcaption><strong>Figure.</strong> Dashboard — Forecast Outcome overview.</figcaption>
+          </figure>
+
+          <h3>Scorecards</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Scorecard</th><th>What it shows</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Forecast Outcome</td><td>Primary outcome view for the active scenario.</td></tr>
+                <tr><td>Compact summary</td><td>Condensed summary report card.</td></tr>
+                <tr><td>Comparison by month</td><td>Month-by-month comparison (including prior-year context when available).</td></tr>
+                <tr><td>Cumulative YTD</td><td>Cumulative year-to-date actual-then-forecast vs budget.</td></tr>
+                <tr><td>Income / expense mix pies</td><td>Mix composition pies for income and expense.</td></tr>
+                <tr><td>Income / expense waterfalls</td><td>P&amp;L-style waterfall bridges (aligned with Analytics waterfall settings).</td></tr>
+                <tr><td>Known Expenses</td><td>Known forecast expense overlays for the scenario.</td></tr>
+                <tr><td>Attendance</td><td>Attendance trend when attendance data is imported.</td></tr>
+                <tr><td>Portfolio</td><td>Portfolio investments trend.</td></tr>
+                <tr><td>Payments</td><td>Payments by payee / name (after monthly payments import).</td></tr>
+                <tr><td>Scenario brief</td><td>Short narrative briefing for the active scenario.</td></tr>
+                <tr><td>Budget Attention</td><td>Highlights areas that need budget attention.</td></tr>
+                <tr><td>Cross-year sanity</td><td>Cross-year consistency checks (Excel export available).</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Exports</h3>
+          <ul>
+            <li><strong>Customize</strong> — Toggle and reorder scorecards for your review pack.</li>
+            <li><strong>PowerPoint</strong> — Export selected scorecards as a .pptx deck (Save dialog on Mac).</li>
+            <li><strong>Annual scorecard PDF</strong> — Produce a PDF package of the annual scorecard set.</li>
+          </ul>
+        </section>
+
+        <!-- ========== 12. ANALYTICS ========== -->
+        <section class="manual-section" id="analytics">
+          <h2>12. Analytics</h2>
+          <p>Analytics is the deep chart workbench. Work through its sections to change scope, period, and chart style. Preferences are remembered for your next visit.</p>
+          <ul>
+            <li>Explore P&amp;L-style breakdowns, trends, and related analysis sections (including payments and attendance when data exists).</li>
+            <li><strong>Copy chart</strong> — Capture the current chart as an image for paste into other apps.</li>
+            <li><strong>PowerPoint deck</strong> — Build a presentation from the visuals on screen, following the app’s title and section template.</li>
+          </ul>
+        </section>
+
+        <!-- ========== 13. REPORTING STUDIO ========== -->
+        <section class="manual-section" id="reporting">
+          <h2>13. Reporting Studio</h2>
+          <p>Reporting Studio is the authoring path from individual visuals to a shareable deck:</p>
+          <ol class="steps">
+            <li><strong>Charts</strong> — Create performance trends, variance bars, waterfalls, or KPI tiles.</li>
+            <li><strong>Scorecards</strong> — Save chart selections into reusable scorecards.</li>
+            <li><strong>Packs</strong> — Assemble scorecards into ordered packs.</li>
+            <li><strong>PowerPoint</strong> — Export the pack (or selected scorecards) to .pptx.</li>
+          </ol>
+        </section>
+
+        <!-- ========== 14. CASHFLOW ========== -->
+        <section class="manual-section" id="cashflow">
+          <h2>14. Cashflow</h2>
+          <p>The Cashflow workspace connects operating results to cash position:</p>
+          <ul>
+            <li><strong>Beginning cash</strong> — Set the opening cash balance for the model.</li>
+            <li><strong>Balance sheet</strong> — Review related balance-sheet context used by cash views.</li>
+            <li><strong>Modeler</strong> — Project cash effects from operating activity and related inputs.</li>
+            <li><strong>Operating fund flags</strong> — Mark funds that participate in operating cash treatment.</li>
+          </ul>
+        </section>
+
+        <!-- ========== 15. INVESTMENTS ========== -->
+        <section class="manual-section" id="investments">
+          <h2>15. Investments</h2>
+          <p>Investments stores <strong>monthly Fidelity-style snapshots</strong> of portfolio balances and related series. Import snapshot files, review trends in the Investments workspace, and export when you need an offline copy. Portfolio trends also appear on the Dashboard when data is present.</p>
+        </section>
+
+        <!-- ========== 16. IMPORTS & EXPORTS ========== -->
+        <section class="manual-section" id="imports-exports">
+          <h2>16. Imports &amp; exports</h2>
+
+          <h3>Imports</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Import</th><th>Where</th><th>Purpose</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Budget</td><td>Forecast tools</td><td>Load plan amounts into the fiscal year hierarchy.</td></tr>
+                <tr><td>Actuals</td><td>Forecast tools</td><td>Load monthly actuals for closed months.</td></tr>
+                <tr><td>History year</td><td>Forecast tools</td><td>Add or refresh a prior fiscal year for comparisons.</td></tr>
+                <tr><td>Monthly payments</td><td>Forecast tools</td><td>Feed payments-by-payee analytics and dashboard.</td></tr>
+                <tr><td>Teller</td><td>Forecast tools</td><td>Offerings / Teller series for overlays and comparisons.</td></tr>
+                <tr><td>Attendance</td><td>Forecast tools</td><td>Attendance trend scorecards and analytics.</td></tr>
+                <tr><td>Investments snapshots</td><td>Investments</td><td>Monthly portfolio balances.</td></tr>
+                <tr><td>Organization package</td><td>Sidebar toolbar, New organization, or drag onto the window</td><td>Import a <code>.rollingorg.json</code> package. If the organization is already in your library, choose <strong>Replace your copy</strong> or <strong>Keep both</strong>.</td></tr>
+                <tr><td>Edit key file</td><td>Drag onto the window, Edit Access…, or Settings → Access</td><td>Add edit access from a <code>.rollingkey</code> file.</td></tr>
+                <tr><td>Backup zip restore</td><td>Settings → Backup / startup</td><td>Restore all data from a zip file or configured URL.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3>Exports</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Export</th><th>Where</th><th>Output</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Budget</td><td>Forecast tools</td><td>Budget spreadsheet.</td></tr>
+                <tr><td>Forecast Excel</td><td>Forecast tools</td><td>.xlsx of grid / known expenses and related sheets.</td></tr>
+                <tr><td>HTML pack</td><td>Forecast tools</td><td>Browsable HTML snapshot package.</td></tr>
+                <tr><td>Budget Builder punch list</td><td>Budget Builder</td><td>Excel punch list.</td></tr>
+                <tr><td>Reality Check</td><td>Reality Check</td><td>Excel punch list + narrative PDF.</td></tr>
+                <tr><td>F vs A Excel</td><td>F vs A</td><td>.xlsx of the compare-month analysis.</td></tr>
+                <tr><td>Cross-year sanity Excel</td><td>Dashboard</td><td>.xlsx of sanity table with outline groups.</td></tr>
+                <tr><td>Dashboard PowerPoint</td><td>Dashboard</td><td>.pptx of selected scorecards.</td></tr>
+                <tr><td>Annual scorecard PDF</td><td>Dashboard</td><td>PDF scorecard package.</td></tr>
+                <tr><td>Analytics PowerPoint</td><td>Analytics</td><td>.pptx deck from analytics visuals.</td></tr>
+                <tr><td>Reporting Studio PowerPoint</td><td>Reporting</td><td>.pptx from packs / scorecards.</td></tr>
+                <tr><td>Summary / chart images</td><td>Summary, Analytics, Forecast</td><td>Clipboard images for slides or email.</td></tr>
+                <tr><td>Organization package</td><td>Sidebar right-click → Export organization…</td><td><code>.rollingorg.json</code> handoff / backup of one org, as a read-only or editable copy.</td></tr>
+                <tr><td>Edit key file</td><td>Sidebar right-click → Edit Access…</td><td><code>.rollingkey</code> file that gives a co-editor edit access.</td></tr>
+                <tr><td>Backup zip</td><td>Settings → Backup</td><td>Zip of organization data to your chosen folder.</td></tr>
+                <tr><td>Investments export</td><td>Investments</td><td>Offline copy of portfolio snapshots.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ========== 17. SHARING & PROTECTING ========== -->
+        <section class="manual-section" id="sharing">
+          <h2>17. Sharing &amp; protecting organizations</h2>
+          <p>Each organization has two independent protections: a <strong>password</strong> that controls who can <em>open</em> it, and <strong>edit access</strong> that controls who can <em>change</em> it. Both travel with the organization in exports, zip backups, and duplicates.</p>
+
+          <h3>Password to open</h3>
+          <ul>
+            <li>Right-click an organization in the sidebar and choose <strong>Set Password…</strong>, <strong>Change Password…</strong>, or <strong>Remove Password…</strong>. You can also add a password when you create an organization.</li>
+            <li>A protected organization is saved encrypted and shows a lock in the sidebar. Select it and enter the password to open it; <strong>Lock Now</strong> closes it again.</li>
+            <li>The password is never stored and cannot be recovered. Set a hint, and keep a zip backup made before the password was added.</li>
+          </ul>
+
+          <h3>Edit access</h3>
+          <p>An organization is in one of three states on each Mac:</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>State</th><th>What it means</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Editor</td><td>This Mac holds the organization’s edit key, so you can change it. You are the editor of every organization you create.</td></tr>
+                <tr><td>Read-only</td><td>You can open and review everything but not change it. The sidebar shows an eye icon and the workspace shows a <strong>Read-only</strong> strip with <strong>Unlock Editing…</strong>.</td></tr>
+                <tr><td>Open</td><td>No edit protection: anyone who has a copy can change it. Organizations from before edit access existed may be Open.</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>The edit key is saved in your Keychain (iCloud Keychain when available, so your other Macs can edit too). You never have to handle it unless you want to share it.</p>
+
+          <h3>Protecting an existing organization</h3>
+          <ol class="steps">
+            <li>Right-click the organization and choose <strong>Protect Editing…</strong> (or click <strong>Protect…</strong> next to it in <strong>Settings → Access</strong>).</li>
+            <li>If it is password protected and locked, enter its password first.</li>
+            <li>Click <strong>Protect Editing</strong>. You become the editor.</li>
+          </ol>
+          <p>Copies you shared before protecting it stay editable for whoever has them. Send a fresh read-only copy to replace them.</p>
+
+          <h3>Sharing an organization</h3>
+          <p>Right-click the organization and choose <strong>Export organization…</strong>. For an organization you edit, choose what recipients can do:</p>
+          <ul>
+            <li><strong>Read-only copy</strong> (recommended) — Recipients can review everything but not change it. The file is signed, so the app can tell it came from an editor and wasn’t altered afterwards.</li>
+            <li><strong>Editable copy</strong> — Includes the edit key. Whoever imports it can change the organization and pass that ability on. Send it only to co-editors you trust.</li>
+          </ul>
+          <p>A password-protected organization still needs its password to open, whichever copy you send.</p>
+
+          <h3>Giving someone edit access later</h3>
+          <p>Right-click the organization and choose <strong>Edit Access…</strong>:</p>
+          <ul>
+            <li><strong>Export Key File…</strong> — Saves a <code>.rollingkey</code> file for a co-editor.</li>
+            <li><strong>Edit password</strong> — Set a password that unlocks editing. It must be different from the password that opens the organization, so people who can open it can’t automatically edit it.</li>
+            <li><strong>More options</strong> — <strong>Reset Edit Access…</strong> (makes every key file, editable copy, and edit password handed out so far stop working), <strong>Stop Editing on This Mac…</strong>, or <strong>Let Anyone Edit…</strong> (removes edit protection).</li>
+          </ul>
+
+          <h3>Unlocking editing on your Mac</h3>
+          <ul>
+            <li>Drag the <code>.rollingkey</code> file anywhere onto the main window, or click <strong>Unlock Editing…</strong> and drop it there or choose it.</li>
+            <li>Or enter the edit password in <strong>Unlock Editing…</strong>. Leave <strong>Remember on this Mac</strong> on to keep editing after you quit.</li>
+            <li>Importing an editable copy gives you edit access automatically.</li>
+          </ul>
+
+          <h3>Receiving an updated copy</h3>
+          <p>When you import an organization that is already in your library, choose <strong>Replace your copy</strong> to bring in the new version, or <strong>Keep both</strong> to add it as a separate organization. The sheet shows whether the file was exported by an editor. A read-only organization can only be replaced by a file its editor exported, so nobody can pass off a changed version as the original. If a file was altered after an editor exported it, the app warns you before importing, and any edit key inside it is ignored.</p>
+
+          <div class="callout caution">
+            <span class="label">Caution</span>
+            <p>If the only copy of an edit key is lost (for example, a Mac is erased and iCloud Keychain was off), nobody can edit that organization again. Editors should keep an exported <code>.rollingkey</code> file somewhere safe.</p>
+          </div>
+        </section>
+
+        <!-- ========== 18. SETTINGS ========== -->
+        <section class="manual-section" id="settings">
+          <h2>18. Settings</h2>
+          <p>Open Settings with <kbd>⌘,</kbd> or <strong>Rolling Forecast → Settings…</strong>.</p>
+
+          <figure>
+            <img src="manual-screenshots/macos/10-settings/settings.png" alt="Settings Appearance tab" loading="lazy" />
+            <figcaption><strong>Figure.</strong> Settings — Appearance.</figcaption>
+          </figure>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Area</th><th>What you configure</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Startup</td><td>None / Ask restore from URL / Environment Control Center.</td></tr>
+                <tr><td>Appearance</td><td>App theme and related visual preferences.</td></tr>
+                <tr><td>Access</td><td>Edit access for each organization (Editor / Read-only / Open, with Manage, Unlock, or Protect), <strong>Add Edit Key File…</strong>, and <strong>Open read-only organizations in Analytics</strong>.</td></tr>
+                <tr><td>Backup</td><td>Backup folder, zip now, restore, prompt on quit, restore URL, open Control Center.</td></tr>
+                <tr><td>About</td><td>Product branding, version, and related links.</td></tr>
+                <tr><td>Forecast look</td><td>Grid color scheme and account column styling (also from Forecast tools).</td></tr>
+                <tr><td>Summary appearance</td><td>Statement styling for Forecast summary.</td></tr>
+                <tr><td>Currency</td><td>Symbol, decimals, and grouping for displayed amounts.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- ========== 19. SHORTCUTS ========== -->
+        <section class="manual-section" id="shortcuts">
+          <h2>19. Keyboard shortcuts</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Shortcut</th><th>Action</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><kbd>⌘,</kbd></td><td>Open Settings</td></tr>
+                <tr><td><kbd>⌘+</kbd> or <kbd>⌘=</kbd></td><td>Zoom in (Forecast grid)</td></tr>
+                <tr><td><kbd>⌘−</kbd></td><td>Zoom out (Forecast grid)</td></tr>
+                <tr><td><kbd>⌘0</kbd></td><td>Reset zoom</td></tr>
+                <tr><td><kbd>⌘⇧9</kbd></td><td>Fit grid</td></tr>
+                <tr><td><kbd>Shift</kbd> + scroll</td><td>Zoom Forecast grid with the mouse wheel</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Additional shortcuts appear next to commands in macOS menus when available.</p>
+        </section>
+
+        <!-- ========== 20. TIPS ========== -->
+        <section class="manual-section" id="tips">
+          <h2>20. Tips, privacy &amp; backup</h2>
+          <h3>Working tips</h3>
+          <ul>
+            <li>Always confirm the active <strong>organization</strong>, <strong>fiscal year</strong>, and <strong>scenario</strong> before interpreting Dashboard or Summary numbers.</li>
+            <li>Advance the scenario <strong>start month</strong> as actuals land so the rolling window stays honest.</li>
+            <li>Use outline <strong>bookmarks</strong> when presenting so you reopen the same collapsed layout every time.</li>
+            <li>Pair Dashboard maximize / full scorecards with Analytics <strong>copy chart</strong> when you need both a pack and a single slide-ready image.</li>
+          </ul>
+
+          <h3>Privacy</h3>
+          <p>Organization data remains on your Mac in the app sandbox. The product does not require a vendor-hosted finance database. Optional restore-from-URL only downloads a zip from a location <em>you</em> configure. Edit keys are kept in your Keychain; they are not included in zip backups.</p>
+
+          <h3>Backup best practices</h3>
+          <ol class="steps">
+            <li>In Settings → Backup, choose a durable destination folder (for example an external drive or synced folder you trust).</li>
+            <li>Run <strong>Back up now as zip</strong> before large imports, hierarchy fixes, or org deletion.</li>
+            <li>Optionally enable <strong>prompt on quit</strong> so you are reminded to back up when closing the app.</li>
+            <li>Store occasional <code>.rollingorg.json</code> exports for single-organization handoff separately from full zip backups.</li>
+            <li>Keep an exported <code>.rollingkey</code> file for each organization you edit. Zip backups don’t include edit keys, so restoring onto a new Mac needs the key file (or iCloud Keychain) to edit again.</li>
+            <li>Test a restore into a safe environment before you rely on a backup for disaster recovery.</li>
+          </ol>
+
+          <div class="callout caution">
+            <span class="label">Caution</span>
+            <p>Restoring a zip replaces local organization data with the archive contents. Confirm you have selected the correct file before proceeding.</p>
+          </div>
+        </section>
+
+        <!-- ========== 21. SUPPORT ========== -->
+        <section class="manual-section" id="support">
+          <h2>21. Support &amp; legal</h2>
+          <ul>
+            <li><strong>Privacy policy:</strong> <a href="https://coxon64.github.io/Rolling-Forecast/privacy.html">https://coxon64.github.io/Rolling-Forecast/privacy.html</a></li>
+            <li><strong>Support:</strong> <a href="https://coxon64.github.io/Rolling-Forecast/support.html">https://coxon64.github.io/Rolling-Forecast/support.html</a></li>
+          </ul>
+          <p>For product questions, contact your deployment administrator or the publisher listed on the Support page.</p>
+          <p>Copyright © 2026 Mike Coxon. All rights reserved. Not affiliated with Apple Inc. Fidelity is a trademark of its respective owner; references to Fidelity-style snapshots describe file format familiarity only.</p>
+        </section>
+
+        <footer class="manual-footer">
+          <p>Rolling Forecast · macOS User Manual</p>
+          <p>Copyright © 2026 Mike Coxon. All rights reserved.</p>
+        </footer>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var btn = document.getElementById("tocToggle");
+      var hint = document.getElementById("tocToggleHint");
+      if (!btn) return;
+      btn.addEventListener("click", function () {
+        var open = document.body.classList.toggle("toc-open");
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+        if (hint) hint.textContent = open ? "(hide)" : "(show)";
+      });
+      document.querySelectorAll("#manualToc a").forEach(function (a) {
+        a.addEventListener("click", function () {
+          if (window.matchMedia("(max-width: 900px)").matches) {
+            document.body.classList.remove("toc-open");
+            btn.setAttribute("aria-expanded", "false");
+            if (hint) hint.textContent = "(show)";
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
